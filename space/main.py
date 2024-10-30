@@ -4,8 +4,8 @@ import random
 
 pygame.font.init()
 
-WIDTH = 750
-HEIGHT = 750
+WIDTH = 1280
+HEIGHT = 720
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
 FOLDER_LOCATION = ".\\assets"
 
@@ -22,7 +22,7 @@ GREEN_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_gree
 BLUE_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_blue.png"))
 YELLOW_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_yellow.png"))
 
-BG = pygame.image.load(os.path.join(FOLDER_LOCATION, "background-black.png"))
+BG = pygame.image.load(os.path.join(FOLDER_LOCATION, "bg_black.png"))
 
 class Laser:
     def __init__(self, x, y, img):
@@ -148,15 +148,15 @@ def main():
     run = True
     FPS = 60
     level = 0
-    lives = 3
+    lives = 5
     main_font = pygame.font.SysFont("comicsans", 50)
     lost_font = pygame.font.SysFont("comicsans", 60)
 
     enemies = []
-    wave_length = 5
-    enemy_vel = 1
+    wave_length = 2
+    enemy_vel = 0.5
 
-    player_vel = 5
+    player_vel = 10
     laser_vel = 4
 
     player = Player(300, 650)
