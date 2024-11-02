@@ -2,6 +2,7 @@ import pygame
 import pygame_menu
 import os
 import random
+import settings
 
 import pygame_menu.font
 
@@ -11,22 +12,23 @@ pygame.init()
 WIDTH = 1280
 HEIGHT = 720
 WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-FOLDER_LOCATION = ".\\assets"
+ASSETS_LOCATION = ".\\assets"
+AUDIO_ASSETS = ".\\audio"
 
 pygame.display.set_caption("Space Shooter")
 
-RED_SPACE_SHIP = pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_ship_red_small.png"))
-GREEN_SPACE_SHIP = pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_ship_green_small.png"))
-BLUE_SPACE_SHIP = pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_ship_blue_small.png"))
+RED_SPACE_SHIP = pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_ship_red_small.png"))
+GREEN_SPACE_SHIP = pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_ship_green_small.png"))
+BLUE_SPACE_SHIP = pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_ship_blue_small.png"))
 
-YELLOW_SPACE_SHIP = pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_ship_yellow.png"))
+YELLOW_SPACE_SHIP = pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_ship_yellow.png"))
 
-RED_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_red.png"))
-GREEN_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_green.png"))
-BLUE_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_blue.png"))
-YELLOW_LASER =  pygame.image.load(os.path.join(FOLDER_LOCATION, "pixel_laser_yellow.png"))
+RED_LASER =  pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_laser_red.png"))
+GREEN_LASER =  pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_laser_green.png"))
+BLUE_LASER =  pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_laser_blue.png"))
+YELLOW_LASER =  pygame.image.load(os.path.join(ASSETS_LOCATION, "pixel_laser_yellow.png"))
 
-BG = pygame.image.load(os.path.join(FOLDER_LOCATION, "bg_black.png"))
+BG = pygame.image.load(os.path.join(ASSETS_LOCATION, "bg_black.png"))
 
 class Laser:
     def __init__(self, x, y, img):
@@ -138,6 +140,7 @@ class Enemy(Ship):
     def shoot(self):
         if self.cool_down_counter == 0:
             laser = Laser(self.x-20, self.y, self.laser_img)
+
             self.lasers.append(laser)
             self.cool_down_counter = 1
 
@@ -231,7 +234,7 @@ def main():
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
-            
+
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
             enemy.move_lasers(laser_vel, player)
@@ -257,14 +260,13 @@ def main():
 
 
 def start_game():
-    # add audio for start button
 
     main()
+
+
 def open_settings():
-    # audio for settings button, and remove 
-    print("Settings menu opened.")
 
-
+    settings.settings_menu(WIN, main_menu)
 
 
 
@@ -276,31 +278,12 @@ def exit_game():
 def main_menu():
     menu = pygame_menu.Menu("Space Invaders: Pyth-ers", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
 
-    # Add buttons to the menu
     menu.add.button("Start", start_game)
     menu.add.button("Settings", open_settings)
     menu.add.button("Exit", exit_game)
 
     menu.mainloop(WIN)
-
-
-    # run = True
-    # while run:
-    #     WIN.blit(BG, (0,0))
-    #     title_label = title_font.render("Mouse1 to start mogga", 1, (255,255,255))
-
- 
-
-    #     WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
-    #     pygame.display.update()
-    #     for event in pygame.event.get():
-    #         if event.type == pygame.QUIT:
-    #             run = False
-    #         if event.type == pygame.MOUSEBUTTONDOWN:
-    #             main()
-
     pygame.quit()
-
 
 main_menu()
 
