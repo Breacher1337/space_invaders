@@ -1,29 +1,26 @@
 import pygame
 import pygame_menu
-import os
 import random
 import settings
-from constants import WIDTH, HEIGHT, WIN, BG
-from ships import Player, Enemy, collide
+from constants import WIDTH, HEIGHT, WIN, BG, AUDIO_ASSETS
+from ships import Player, Enemy, collide, ships_data, character_select, ships_data
+from audio import sound_onclick, sound_laser, sound_defeat, menu_music, game_music
 
 import pygame_menu.font
 
 pygame.font.init()
 pygame.init()
-
-WIDTH = 1280
-HEIGHT = 720
-WIN = pygame.display.set_mode((WIDTH, HEIGHT))
-ASSETS_LOCATION = ".\\assets"
-AUDIO_ASSETS = ".\\audio"
+pygame.mixer.init()
 
 pygame.display.set_caption("Space Shooter")
 
-def main():
+def main(player, player_stats):
+    game_music()
+
     run = True
     FPS = 60
     level = 0
-    lives = 5
+    lives = player_stats["lives"]
     main_font = pygame.font.SysFont("comicsans", 50)
     lost_font = pygame.font.SysFont("comicsans", 60)
 
@@ -31,10 +28,9 @@ def main():
     wave_length = 2
     enemy_vel = 0.5
 
-    player_vel = 10
+    player_vel = player_stats["player_vel"]
+    player_laser_vel = player_stats["laser_vel"]
     laser_vel = 4
-
-    player = Player(300, 650)
     
     clock = pygame.time.Clock()
 
@@ -80,7 +76,7 @@ def main():
 
         if len(enemies) == 0:
             level += 1
-            wave_length += 7
+            wave_length += random.randint(1, 3)
 
             for i in range(wave_length):
                 enemy = Enemy(random.randrange(50, WIDTH-100), random.randrange(-1500,-100), random.choice(["red", "blue", "green"]))
@@ -124,28 +120,47 @@ def main():
                 lives -= 1
                 enemies.remove(enemy)
 
-        player.move_lasers(-laser_vel, enemies)
+        player.move_lasers(-player_laser_vel, enemies)
 
-def start_game():
+def start_game(selected_ship_name):
+    if selected_ship_name:
+        player_stats = ships_data[selected_ship_name]
+        print(f"Selected ship: {selected_ship_name}")
+        print(f"Selected ship stats: {player_stats}")
+        sound_onclick()
+        
+        player = Player(600, 540, health=player_stats["health"], ship_img=player_stats["ship_img"], laser_img=player_stats["laser_img"], fire_rate=player_stats["fire_rate"])
 
-    main()
-
+        main(player=player, player_stats=player_stats)
+    else: 
+        print("No ship selected!") 
 
 def open_settings():
 
+    sound_onclick()
     settings.settings_menu(WIN, main_menu)
-
-
 
 def exit_game():
     pygame.quit()
     quit()
 
+def open_character_select():
+    sound_onclick()
+
+    settings.save_settings()
+
+    selected_ship_name = character_select(WIN)
+    start_game(selected_ship_name)
 
 def main_menu():
     menu = pygame_menu.Menu("Space Invaders: Pyth-ers", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
+    menu.add.label("Welcome to Space Invaders: Pyth-ers!")
 
-    menu.add.button("Start", start_game)
+    pygame.mixer.music.stop()
+
+    menu_music()
+
+    menu.add.button("Start", open_character_select)
     menu.add.button("Settings", open_settings)
     menu.add.button("Exit", exit_game)
 
