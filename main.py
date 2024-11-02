@@ -1,8 +1,12 @@
 import pygame
+import pygame_menu
 import os
 import random
 
+import pygame_menu.font
+
 pygame.font.init()
+pygame.init()
 
 WIDTH = 1280
 HEIGHT = 720
@@ -44,7 +48,7 @@ class Laser:
         return collide(self, obj)
 
 class Ship:
-    COOLDOWN_COUNTER = 30
+    COOLDOWN_COUNTER = 15
 
     def __init__(self, x, y, health=100) -> None:
         self.x = x
@@ -227,6 +231,7 @@ def main():
             player.y += player_vel
         if keys[pygame.K_SPACE]:
             player.shoot()
+            
         for enemy in enemies[:]:
             enemy.move(enemy_vel)
             enemy.move_lasers(laser_vel, player)
@@ -250,19 +255,50 @@ def main():
 
         player.move_lasers(-laser_vel, enemies)
 
+
+def start_game():
+    # add audio for start button
+
+    main()
+def open_settings():
+    # audio for settings button, and remove 
+    print("Settings menu opened.")
+
+
+
+
+
+def exit_game():
+    pygame.quit()
+    quit()
+
+
 def main_menu():
-    title_font = pygame.font.SysFont("comicsans", 70)
-    run = True
-    while run:
-        WIN.blit(BG, (0,0))
-        title_label = title_font.render("Mouse1 to start", 1, (255,255,255))
-        WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                main()
+    menu = pygame_menu.Menu("Space Invaders: Pyth-ers", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
+
+    # Add buttons to the menu
+    menu.add.button("Start", start_game)
+    menu.add.button("Settings", open_settings)
+    menu.add.button("Exit", exit_game)
+
+    menu.mainloop(WIN)
+
+
+    # run = True
+    # while run:
+    #     WIN.blit(BG, (0,0))
+    #     title_label = title_font.render("Mouse1 to start mogga", 1, (255,255,255))
+
+ 
+
+    #     WIN.blit(title_label, (WIDTH/2 - title_label.get_width()/2, 350))
+    #     pygame.display.update()
+    #     for event in pygame.event.get():
+    #         if event.type == pygame.QUIT:
+    #             run = False
+    #         if event.type == pygame.MOUSEBUTTONDOWN:
+    #             main()
+
     pygame.quit()
 
 
