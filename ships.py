@@ -240,14 +240,32 @@ def select_ship(ship_name, selected_ship_ref):
 
 # show ship stats such as health_star, speed_star, fire_rate_star, and description
 def character_select(screen):
-	menu = pygame_menu.Menu("Select Your Ship", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
+    # Initialize the menu
+    menu = pygame_menu.Menu("Select Your Ship", WIDTH, HEIGHT, theme=pygame_menu.themes.THEME_DARK)
+    
+    # Placeholder for the selected ship's name
+    selected_ship_name = [None]
+    
+    # Placeholder for displaying ship stats
+    stats_label = menu.add.label("", max_char=-1, font_size=20, align=pygame_menu.locals.ALIGN_CENTER)
 
-	selected_ship_name = [None]
+	# Ship stars
 
-	for ship_name in ships_data.keys():
-		menu.add.button(ship_name, lambda s=ship_name: select_ship(s, selected_ship_name))
-		
-	menu.add.button("Confirm", lambda: menu.disable())		
-	menu.mainloop(screen)
+    def show_ship_stats(ship_name):
+        stats = ships_data[ship_name] 
+        stats_text = f"{stats['description']}"
+        stats_label.set_title(stats_text) 
 
-	return selected_ship_name[0]
+	
+
+    # Create buttons for each ship
+    for ship_name in ships_data.keys():
+        menu.add.button(ship_name, lambda s=ship_name: (select_ship(s, selected_ship_name), show_ship_stats(s)))
+        
+    # Confirm button to proceed with the selection
+    menu.add.button("Confirm", lambda: menu.disable())
+    
+    # Display the menu
+    menu.mainloop(screen)
+    
+    return selected_ship_name[0]
