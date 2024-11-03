@@ -313,10 +313,15 @@ def select_difficulty(selected_ship_name):
 def start_game(selected_ship_name, enemy_vel, wave_length):
     if selected_ship_name:
         player_stats = ships_data[selected_ship_name]
+
         print(f"Starting game with enemy speed: {enemy_vel} and wave length: {wave_length}")
+
         sound_onclick()
+        print(f"Selected ship: {selected_ship_name}")
+        print(player_stats)
         
-        player = Player(600, 540, health=player_stats["health"], ship_img=player_stats["ship_img"], laser_img=player_stats["laser_img"], fire_rate=player_stats["fire_rate"])
+        player = Player(600, 540, health=player_stats["health"], ship_img=player_stats["ship_img"], laser_img=player_stats["laser_img"], fire_rate=player_stats["fire_rate"],
+                        ammo=player_stats["ammo"], reload_speed=player_stats["reload_speed"])
 
         main(player=player, player_stats=player_stats, enemy_vel=enemy_vel, wave_length=wave_length)
     else: 
