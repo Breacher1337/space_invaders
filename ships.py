@@ -244,8 +244,12 @@ def character_select(screen):
 
 	selected_ship_name = [None]
 
+	text = menu.add.label("Select your ship to begin the game.")
+
 	for ship_name in ships_data.keys():
 		menu.add.button(ship_name, lambda s=ship_name: select_ship(s, selected_ship_name))
+
+	text.append("")
 		
 	menu.add.button("Confirm", lambda: menu.disable())		
 	menu.mainloop(screen)

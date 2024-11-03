@@ -4,15 +4,25 @@ import pygame
 from constants import AUDIO_ASSETS
 
 
-from settings import get_sfx_volume, get_music_volume, sound_files
+from settings import get_sfx_volume, get_music_volume, sound_files 
+
+# sound_files = {
+#     "button_click1": pygame.mixer.Sound(os.path.join(AUDIO_ASSETS, "button_click1.wav")),
+#     "button_click2": pygame.mixer.Sound(os.path.join(AUDIO_ASSETS, "button_click2.wav")),
+#     "button_click3": pygame.mixer.Sound(os.path.join(AUDIO_ASSETS, "button_click3.wav")),
+#     "defeat": pygame.mixer.Sound(os.path.join(AUDIO_ASSETS, "defeat.wav")),
+#     "audio_on_click": pygame.mixer.Sound(os.path.join(AUDIO_ASSETS, "audio_on_click.wav")),
+# }
+
 def sound_onclick():
-	random.choice([sound_files["button_click1"], sound_files["button_click2"], sound_files["button_click3"]]).play()
-    
+	num = random.randint(1, 3)
+	sound_files["button_click" + str(num)].play()
+
 def sound_laser():
-    pygame.mixer.Sound.play(pygame.mixer.Sound(AUDIO_ASSETS + "\\laser" + random.choice(["1", "2", "3"]) + ".wav"))
+	sound_files["audio_on_click"].play()
      
 def sound_defeat():
-	pygame.mixer.Sound.play(pygame.mixer.Sound(AUDIO_ASSETS + "\\defeat" + random.choice(["1", "2", "3"]) + ".wav"))
+	sound_files["defeat"].play()
      
 def menu_music():
 	pygame.mixer.music.load(AUDIO_ASSETS + "\\menu_music.mp3")
